@@ -171,4 +171,5 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 		Gossip_chatroom_listener listener = (Gossip_chatroom_listener)o;
 		return listener.getChat().equals(this.getChat());
 	}
+	//TODO: Se chiusa e riaperta scrive due volte il primo messaggio
 }

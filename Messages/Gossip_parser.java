@@ -382,7 +382,6 @@ public class Gossip_parser {
 			members.add(buildUser(iterator.next()));
 			
 		}
-		System.out.println("PORTTTTT N2"+multicastPort);
 		try {
 			return new Gossip_chat(chatname, InetAddress.getByName(multicastAddress), multicastPort, InetAddress.getByName(chatAddress), chatPort, members);
 		} catch (UnknownHostException e) {

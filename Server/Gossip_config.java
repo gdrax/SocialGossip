@@ -18,8 +18,8 @@ public class Gossip_config {
 	public static final String RMI_NAME = "Gossip_notification";
 	public static final String MULTICAST_FIRST = "226.0.0.0";
 	public static final String MUTLICAST_LAST = "226.0.0.255";
-	public static final String DOWNLOAD_DIR = "\\downloads\\";
-	public static final String UPLOAD_DIR = "\\uploads\\";
+	public static final String DOWNLOAD_DIR = "/downloads/";
+	public static final String UPLOAD_DIR = "/uploads/";
 	
 	/**
 	 * @return una porta libera

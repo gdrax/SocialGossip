@@ -52,14 +52,15 @@ public class Gossip_main_listener extends Gossip_listener {
 	private Gossip_RMI_client_implementation callback;
 	private Gossip_message_receiver_thread th_receiver;
 	private ArrayList<Gossip_chat> chatrooms;
+	private String password;	
 	
-	
-	public Gossip_main_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_user u, ArrayList<Gossip_user> f, ArrayList<Gossip_chat> c) {
+	public Gossip_main_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_user u, ArrayList<Gossip_user> f, ArrayList<Gossip_chat> c, String p) {
 		super(i, o, s, u);
 		
 		if (u == null)
 			throw new NullPointerException();
 		user = u;
+		password = p;
 		window = new Gossip_main_form(f, c, user);
 		this.setFrame(window.getFrame());
 		this_listener = this;
@@ -92,9 +93,8 @@ public class Gossip_main_listener extends Gossip_listener {
 	 * Avvia il thread che riceve i messaggi di notifica
 	 */
 	private void initThreadReceiver() {
-		th_receiver = new Gossip_message_receiver_thread(socket.getInetAddress(), socket.getPort(), main, user);
+		th_receiver = new Gossip_message_receiver_thread(socket.getInetAddress(), socket.getPort(), main, user, password);
 		th_receiver.start();
-		//TODO Connessione per le notifiche su un altra porta
 	}
 	
 	public void listen() {
@@ -107,7 +107,7 @@ public class Gossip_main_listener extends Gossip_listener {
 		window.getFrame().addWindowListener(new WindowAdapter() {
 			
 			@Override
-			public void windowClosing(WindowEvent e) {
+			public void windowClosed(WindowEvent e) {
 				//avvio thread per inviare la richiesta di logout
 				new Gossip_logout_thread(input, output, socket, main, user).start();
 			}
@@ -345,6 +345,16 @@ public class Gossip_main_listener extends Gossip_listener {
 	public void removeFriendChatListener(Gossip_friend_chat_listener listener) {
 		synchronized (friend_chat_listeners) {
 			friend_chat_listeners.remove(listener);	
+		}
+	}
+	
+	/**
+	 * Chiude le connessioni aperte per le chatroom
+	 */
+	public void closeChatroomConnections() {
+		for (Gossip_chatroom_listener l: chatroom_listeners) {
+			l.closeConnection();
+			chatroom_listeners.remove(l);
 		}
 	}
 	

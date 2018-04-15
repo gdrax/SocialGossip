@@ -53,7 +53,7 @@ public class Gossip_login_thread extends Gossip_client_thread {
 			Gossip_user myinfo = Gossip_parser.getUser(JSONReply);
 			
 			//creo e rendo visibile la finestra principale del client
-			Gossip_main_listener main = new Gossip_main_listener(input, output, socket, myinfo, friends, chats);
+			Gossip_main_listener main = new Gossip_main_listener(input, output, socket, myinfo, friends, chats, new String(password));
 			listener.closeWindow();
 			main.init();
 		}

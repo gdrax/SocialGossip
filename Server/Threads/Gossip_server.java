@@ -82,6 +82,5 @@ public class Gossip_server implements Runnable {
 			server.run();
 		} catch (IOException e) {e.printStackTrace();}
 	}
-	
-	//TODO: Modificare i path di download e upload dei file per supportare ogni OS
+//TODO: Continua a inviare messaggi a amico offline, non dovrebbe neanche aprire la chat?
 }

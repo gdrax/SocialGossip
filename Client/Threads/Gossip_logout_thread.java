@@ -49,8 +49,9 @@ public class Gossip_logout_thread extends Gossip_client_thread {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} finally {
-			listener.closeConnection();
-			listener.closeWindow();
+			main.closeConnection();
+			main.closeWindow();
+			main.closeChatroomConnections();
 		}
 	}
 

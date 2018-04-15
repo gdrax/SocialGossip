@@ -16,7 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import Client.Listeners.Gossip_main_listener;
 import Messages.Gossip_parser;
-import Messages.Client_side.Gossip_client_message;
+import Messages.Client_side.Gossip_listening_message;
 import Messages.Server_side.Gossip_connection_info_message;
 import Messages.Server_side.Gossip_server_message;
 import Server.Gossip_config;
@@ -38,8 +38,9 @@ public class Gossip_message_receiver_thread extends Thread {
 	private Socket messageSocket;
 	private DataInputStream input;
 	private DataOutputStream output;
+	private String password;
 	
-	public Gossip_message_receiver_thread(InetAddress a, int p, Gossip_main_listener m, Gossip_user u) {
+	public Gossip_message_receiver_thread(InetAddress a, int p, Gossip_main_listener m, Gossip_user u, String psw) {
 		super();
 		
 		if (a == null || m == null || u == null)
@@ -49,6 +50,7 @@ public class Gossip_message_receiver_thread extends Thread {
 		user = u;
 		port = p;
 		main = m;
+		password = psw;
 		
 		try {
 			messageSocket = new Socket(address, port);
@@ -56,7 +58,7 @@ public class Gossip_message_receiver_thread extends Thread {
 			output = new DataOutputStream(messageSocket.getOutputStream());
 			
 			//segnalo al server che sono un therad che riceve solo notifiche
-			output.writeUTF(new Gossip_client_message(Gossip_client_message.Op.LISTENING_OP, user.getName()).getJsonString());
+			output.writeUTF(new Gossip_listening_message(user.getName(), password).getJsonString());
 			
 			//leggo risposta e verifico che sia di successo
 			String reply = input.readUTF();

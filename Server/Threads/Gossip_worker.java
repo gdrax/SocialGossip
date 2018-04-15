@@ -294,10 +294,17 @@ public class Gossip_worker implements Runnable {
 					break;
 					
 				case LISTENING_OP:
-					data.getUser(sender).setMessageSocket(clientSocket);
-					//è un socket solo per le notifiche, faccio chiudere il worker
-					closeThread = true;
-					sendReply(new Gossip_server_message(Gossip_server_message.Op.SUCCESS_OP), clientStream);
+					String password = Gossip_parser.getPassword(request);
+					if (data.getUser(sender).getPassword().equals(password)) {
+						data.getUser(sender).setMessageSocket(clientSocket);
+						//è un socket solo per le notifiche, faccio chiudere il worker
+						closeThread = true;
+						sendReply(new Gossip_server_message(Gossip_server_message.Op.SUCCESS_OP), clientStream);
+					}
+					else {
+						closeThread = true;
+						sendReply(new Gossip_fail_message(Gossip_fail_message.failMsg.WRONGPASSWORD), clientStream);
+					}
 					break;
 					
 				case CHAT_OP:
