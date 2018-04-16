@@ -107,7 +107,7 @@ public class Gossip_main_listener extends Gossip_listener {
 		window.getFrame().addWindowListener(new WindowAdapter() {
 			
 			@Override
-			public void windowClosed(WindowEvent e) {
+			public void windowClosing(WindowEvent e) {
 				//avvio thread per inviare la richiesta di logout
 				new Gossip_logout_thread(input, output, socket, main, user).start();
 			}
@@ -258,6 +258,7 @@ public class Gossip_main_listener extends Gossip_listener {
 				System.out.println("Aprilo");
 				if (!newListener.getFrame().isVisible())
 					newListener.setVisible(true);
+				System.out.println("Open "+chatroom_listeners.size());
 			}
 		} catch (IndexOutOfBoundsException e) {
 			//la finestra non c'è ne apro una nuova
@@ -270,11 +271,11 @@ public class Gossip_main_listener extends Gossip_listener {
 				chatrooms.add(chat);
 			}
 			newListener.init();
+			System.out.println("Add "+chatroom_listeners.size());
 		}
-		System.out.println("Add "+chatroom_listeners.size());
 		
 	}
-
+	
 	/**
 	 * Elimina il listener della finestra di interazione con la chat
 	 * @param chatname: chat contenuta dal listener
@@ -357,6 +358,13 @@ public class Gossip_main_listener extends Gossip_listener {
 			l.closeConnection();
 			chatroom_listeners.remove(l);
 		}
+	}
+	
+	/**
+	 * Termina il thread receiver
+	 */
+	public void closeReceiverThread() {
+		th_receiver.interrupt();
 	}
 	
 	public synchronized Gossip_chat getChatroom(String chatname) {

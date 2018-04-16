@@ -88,6 +88,7 @@ public class Gossip_message_receiver_thread extends Thread {
 				
 			} catch (IOException e) {
 				e.printStackTrace();
+				System.out.println("Thread receiver chiuso");
 				break;
 			}
 		}

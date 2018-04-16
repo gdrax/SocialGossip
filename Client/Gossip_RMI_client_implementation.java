@@ -58,9 +58,6 @@ public class Gossip_RMI_client_implementation extends RemoteObject implements Go
 			//aggiungo chat alla lista
 			main.getChatListModel().addElement(chat.getName());
 			main.infoMessage("Nuova chatroom: "+chat.getName());
-			//se è l'owner a ricevere il messaggio apro la chat
-			if (chat.getOwner().equals(main.getUser()))
-				main.addChatroomListener(chat);
 		}
 	}
 

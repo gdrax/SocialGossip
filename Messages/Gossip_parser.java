@@ -308,6 +308,8 @@ public class Gossip_parser {
 			return Gossip_success_message.successMsg.USERINFO;
 		if (type.equals(Gossip_success_message.successMsg.CONNECTIONINFO.name()))
 			return Gossip_success_message.successMsg.CONNECTIONINFO;
+		if (type.equals(Gossip_success_message.successMsg.CHATINFO.name()))
+			return Gossip_success_message.successMsg.CHATINFO;
 		return null;
 	}
 	

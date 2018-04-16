@@ -45,6 +45,7 @@ public class Gossip_add_chat_thread extends Gossip_client_thread {
 
 	@Override
 	protected void successOps() {
+		System.out.println(Gossip_parser.getSuccessType(JSONReply));
 		if (Gossip_parser.getSuccessType(JSONReply) == Gossip_success_message.successMsg.CHATINFO) {
 			listener.infoMessage("Chat creata con successo");
 			try {
@@ -52,9 +53,12 @@ public class Gossip_add_chat_thread extends Gossip_client_thread {
 			} catch (SocketException | UnknownHostException e) {
 				e.printStackTrace();
 			}
+			System.out.println("THERE?");
 		}
-		else
+		else {
 			unknownReplyError();
+			System.out.println("HERE?");
+		}
 	}
 
 	@Override
