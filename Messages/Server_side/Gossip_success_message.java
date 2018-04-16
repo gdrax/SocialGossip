@@ -14,7 +14,7 @@ package Messages.Server_side;
  *
  */
 public class Gossip_success_message extends Gossip_server_message {
-		public enum successMsg {CHATLIST, FRIENDLIST, LOGIN, REGISTRATION, USERINFO, CONNECTIONINFO};
+		public enum successMsg {CHATLIST, FRIENDLIST, LOGIN, REGISTRATION, USERINFO, CONNECTIONINFO, CHATINFO};
 		public static final String SUCCESSMSG = "successmsg";
 		
 		protected Gossip_success_message.successMsg msg;

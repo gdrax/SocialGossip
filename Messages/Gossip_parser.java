@@ -16,6 +16,7 @@ import Messages.Client_side.Gossip_action_msg_message;
 import Messages.Client_side.Gossip_chat_message;
 import Messages.Client_side.Gossip_client_message;
 import Messages.Client_side.Gossip_registration_message;
+import Messages.Server_side.Gossip_chat_info_message;
 import Messages.Server_side.Gossip_connection_info_message;
 import Messages.Server_side.Gossip_fail_message;
 import Messages.Server_side.Gossip_file_notification_message;
@@ -411,6 +412,17 @@ public class Gossip_parser {
 		if (user == null)
 			return null;
 		return buildUser(user);
+	}
+	
+	/**
+	 * @param obj
+	 * @return dati della chat appena creata
+	 */
+	public static Gossip_chat getChat(JSONObject obj) {
+		JSONObject chat = (JSONObject)obj.get(Gossip_chat_info_message.CHATINFO);
+		if (chat == null)
+			return null;
+		return buildChat(chat);
 	}
 	
 	/**

@@ -3,11 +3,14 @@ package Client.Threads;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import Client.Listeners.Gossip_main_listener;
 import Messages.Gossip_parser;
 import Messages.Client_side.Gossip_chat_message;
 import Messages.Server_side.Gossip_fail_message;
+import Messages.Server_side.Gossip_success_message;
 import Server.Structures.Gossip_user;
 
 /**
@@ -19,6 +22,7 @@ import Server.Structures.Gossip_user;
 public class Gossip_add_chat_thread extends Gossip_client_thread {
 	
 	private String chatname;
+	private Gossip_main_listener main;
 
 	public Gossip_add_chat_thread(DataInputStream i, DataOutputStream o, Socket s, Gossip_main_listener l, Gossip_user u, String c) {
 		super(i, o, s, l, u);
@@ -31,6 +35,7 @@ public class Gossip_add_chat_thread extends Gossip_client_thread {
 			ready = true;
 
 		chatname = c;
+		main = l;
 	}
 
 	@Override
@@ -40,7 +45,16 @@ public class Gossip_add_chat_thread extends Gossip_client_thread {
 
 	@Override
 	protected void successOps() {
-		listener.infoMessage("Chat creata con successo");
+		if (Gossip_parser.getSuccessType(JSONReply) == Gossip_success_message.successMsg.CHATINFO) {
+			listener.infoMessage("Chat creata con successo");
+			try {
+				main.addChatroomListener(Gossip_parser.getChat(JSONReply));
+			} catch (SocketException | UnknownHostException e) {
+				e.printStackTrace();
+			}
+		}
+		else
+			unknownReplyError();
 	}
 
 	@Override

@@ -311,4 +311,11 @@ public class Gossip_data {
 		return graph.getNode(new Gossip_user(username));
 	}
 	
+	/**
+	 * @param chatname
+	 * @return: struttura dati di una chat
+	 */
+	public Gossip_chat getChat(String chatname) {
+		return chats.get(chats.indexOf(new Gossip_chat(chatname)));
+	}	
 }

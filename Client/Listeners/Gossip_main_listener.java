@@ -262,6 +262,7 @@ public class Gossip_main_listener extends Gossip_listener {
 		} catch (IndexOutOfBoundsException e) {
 			//la finestra non c'è ne apro una nuova
 			newListener = new Gossip_chatroom_listener(input, output, socket, main, user, chat);
+			System.out.println("IOOB");
 			synchronized (chatroom_listeners ) {
 				chatroom_listeners.add(newListener);
 			}

@@ -16,6 +16,7 @@ import Messages.Gossip_parser;
 import Messages.Client_side.Gossip_action_message;
 import Messages.Client_side.Gossip_chat_message;
 import Messages.Client_side.Gossip_client_message;
+import Messages.Server_side.Gossip_chat_info_message;
 import Messages.Server_side.Gossip_fail_message;
 import Messages.Server_side.Gossip_file_notification_message;
 import Messages.Server_side.Gossip_info_login_message;
@@ -199,7 +200,7 @@ public class Gossip_worker implements Runnable {
 			switch(op) {
 				case CREATE_CHAT_OP: {
 					data.addChat(chatname, sender);
-					sendReply(new Gossip_server_message(Gossip_server_message.Op.SUCCESS_OP), clientStream);
+					sendReply(new Gossip_chat_info_message(data.getChat(chatname)), clientStream);
 				} break;
 				
 				case ADDME_OP: {
