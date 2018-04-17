@@ -53,12 +53,9 @@ public class Gossip_add_chat_thread extends Gossip_client_thread {
 			} catch (SocketException | UnknownHostException e) {
 				e.printStackTrace();
 			}
-			System.out.println("THERE?");
 		}
-		else {
+		else
 			unknownReplyError();
-			System.out.println("HERE?");
-		}
 	}
 
 	@Override

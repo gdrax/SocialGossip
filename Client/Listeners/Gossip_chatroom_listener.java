@@ -40,10 +40,6 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 	public Gossip_chatroom_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_main_listener m, Gossip_user u, Gossip_chat c) throws SocketException, UnknownHostException {
 		super(i, o, s, u);
 		
-		if (u==null)
-			System.out.println("U");
-		if (c==null)
-			System.out.println("C");
 		if (u == null || c == null || m == null)
 			throw new NullPointerException();
 		
@@ -178,4 +174,5 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 		return listener.getChat().equals(this.getChat());
 	}
 	//TODO: Se chiusa e riaperta scrive due volte il primo messaggio
+	//TODO: join sul thread sembra non andare bene, e problemi col timeout 
 }

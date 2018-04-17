@@ -289,7 +289,6 @@ public class Gossip_main_listener extends Gossip_listener {
 				chatroom_listeners.remove(toRemove);
 			} catch (IndexOutOfBoundsException e) {
 				//chat non presente
-				System.out.println("NOPE");
 			}
 		}
 		System.out.println("Remove: "+chatroom_listeners.size());

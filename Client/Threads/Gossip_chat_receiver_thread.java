@@ -36,6 +36,7 @@ public class Gossip_chat_receiver_thread extends Thread {
 		
 		//entro nel gruppo multicast
 		chatSocket.joinGroup(address);
+		chatSocket.setSoTimeout(500);
 	}
 	
 	public void run() {
