@@ -361,6 +361,15 @@ public class Gossip_main_listener extends Gossip_listener {
 	}
 	
 	/**
+	 * Aggiunge una chatroom alla lista
+	 * @param chat
+	 */
+	public void addChatroom(Gossip_chat chat) {
+		if (!chatrooms.contains(chat))
+			chatrooms.add(chat);
+	}
+	
+	/**
 	 * Termina il thread receiver
 	 */
 	public void closeReceiverThread() {

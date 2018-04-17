@@ -40,6 +40,10 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 	public Gossip_chatroom_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_main_listener m, Gossip_user u, Gossip_chat c) throws SocketException, UnknownHostException {
 		super(i, o, s, u);
 		
+		if (u==null)
+			System.out.println("U");
+		if (c==null)
+			System.out.println("C");
 		if (u == null || c == null || m == null)
 			throw new NullPointerException();
 		
@@ -81,7 +85,6 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 			public void windowClosing(WindowEvent e) {
 				//rimuovo il listener dalla lista
 				main.removeChatroomListener(chat);
-				chat_receiver.interrupt();
 			}
 		});
 		
@@ -141,6 +144,9 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 		port = chat.getChatPort();
 	}
 	
+	/**
+	 * Termina il thread receiver della chatroom
+	 */
 	public void stopReceiverThread() {
 		chat_receiver.interrupt();
 	}

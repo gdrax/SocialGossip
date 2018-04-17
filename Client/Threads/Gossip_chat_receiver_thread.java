@@ -57,14 +57,12 @@ public class Gossip_chat_receiver_thread extends Thread {
 				JTextArea text_area = main.getChatMessageArea(chat);
 				if (text_area != null)
 					text_area.append(text+"\n");
-				else
-					System.out.println("Nullshit");
 				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
+		System.out.println("LA CHIUDO QUA");
 		//chiudo connessione
 		chatSocket.close();
 	}

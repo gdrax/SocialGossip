@@ -56,6 +56,7 @@ public class Gossip_RMI_client_implementation extends RemoteObject implements Go
 	public void addChat(Gossip_chat chat) throws SocketException, UnknownHostException {
 		if (chat != null) {
 			//aggiungo chat alla lista
+			main.addChatroom(chat);
 			main.getChatListModel().addElement(chat.getName());
 			main.infoMessage("Nuova chatroom: "+chat.getName());
 		}
