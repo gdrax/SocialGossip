@@ -79,7 +79,6 @@ public class Gossip_message_receiver_thread extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				
 				//leggo notifica
 				String notification = input.readUTF();
 				
@@ -87,8 +86,7 @@ public class Gossip_message_receiver_thread extends Thread {
 				parseNotification(notification);
 				
 			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("Thread receiver chiuso");
+				//è stato invocato il metodo close, che chiude il socket, esco dal ciclo
 				break;
 			}
 		}
@@ -150,6 +148,17 @@ public class Gossip_message_receiver_thread extends Thread {
 		} catch (PortNotFoundException e) {
 			//invio messaggio di errore
 			output.writeUTF(new Gossip_server_message(Gossip_server_message.Op.FAIL_OP).getJsonString());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Chiude il socket, e provoca la terminazione del thread
+	 */
+	public void close() {
+		try {
+			messageSocket.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

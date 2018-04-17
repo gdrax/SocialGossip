@@ -364,7 +364,7 @@ public class Gossip_main_listener extends Gossip_listener {
 	 * Termina il thread receiver
 	 */
 	public void closeReceiverThread() {
-		th_receiver.interrupt();
+		th_receiver.close();
 	}
 	
 	public synchronized Gossip_chat getChatroom(String chatname) {

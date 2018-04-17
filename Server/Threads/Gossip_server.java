@@ -82,5 +82,4 @@ public class Gossip_server implements Runnable {
 			server.run();
 		} catch (IOException e) {e.printStackTrace();}
 	}
-//TODO: Continua a inviare messaggi a amico offline, non dovrebbe neanche aprire la chat?
 }

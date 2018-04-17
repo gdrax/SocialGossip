@@ -52,6 +52,7 @@ public class Gossip_logout_thread extends Gossip_client_thread {
 			main.closeConnection();
 			main.closeWindow();
 			main.closeChatroomConnections();
+			main.closeReceiverThread();
 		}
 	}
 
