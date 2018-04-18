@@ -7,8 +7,9 @@ package Server;
  *
  */
 public class PortNotFoundException extends Exception{
-	private static final long serialVersionUID = 1L;
-	
+
+	private static final long serialVersionUID = 3963616439932579757L;
+
 	public PortNotFoundException() {
 		super();
 	}

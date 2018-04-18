@@ -12,14 +12,14 @@ import java.net.ServerSocket;
  */
 public class Gossip_config {
 
-	public static final int TCP_PORT = 5000;
-	public static final String SERVER_NAME = "localhost";
-	public static final int RMI_PORT = 7000;
-	public static final String RMI_NAME = "Gossip_notification";
-	public static final String MULTICAST_FIRST = "226.0.0.0";
-	public static final String MUTLICAST_LAST = "226.0.0.255";
-	public static final String DOWNLOAD_DIR = "/downloads/";
-	public static final String UPLOAD_DIR = "/uploads/";
+	public static final int TCP_PORT = 5000; //porta per le connessioni TCP
+	public static final String SERVER_NAME = "localhost"; //nome del server
+	public static final int RMI_PORT = 7000; //porta per il registry
+	public static final String RMI_NAME = "Gossip_notification"; //nome del servizio RMI
+	public static final String MULTICAST_FIRST = "226.0.0.0"; //primo indirizzo multicast utilizzabile per le chatroom
+	public static final String MUTLICAST_LAST = "226.0.0.255"; //ultimo indirizzo multicast utilizzabile per le chatroom
+	public static final String DOWNLOAD_DIR = "/downloads/"; //directory nella quale scaricare i file ricevuti
+	public static final String UPLOAD_DIR = "/uploads/"; //directory dalla quale caricare i file da inviare
 	
 	/**
 	 * @return una porta libera

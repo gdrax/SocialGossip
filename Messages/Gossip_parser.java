@@ -10,23 +10,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import Messages.Client_side.Gossip_action_file_message;
-import Messages.Client_side.Gossip_action_message;
-import Messages.Client_side.Gossip_action_msg_message;
-import Messages.Client_side.Gossip_chat_message;
-import Messages.Client_side.Gossip_client_message;
-import Messages.Client_side.Gossip_registration_message;
-import Messages.Server_side.Gossip_chat_info_message;
-import Messages.Server_side.Gossip_connection_info_message;
-import Messages.Server_side.Gossip_fail_message;
-import Messages.Server_side.Gossip_file_notification_message;
-import Messages.Server_side.Gossip_info_login_message;
-import Messages.Server_side.Gossip_info_registration_message;
-import Messages.Server_side.Gossip_notification_message;
+import Messages.Client_side.*;
+import Messages.Client_side.Action_messages.*;
 import Messages.Server_side.Gossip_server_message;
-import Messages.Server_side.Gossip_success_message;
-import Messages.Server_side.Gossip_text_notification_message;
-import Messages.Server_side.Gossip_userinfo_message;
+import Messages.Server_side.Fail_messages.Gossip_fail_message;
+import Messages.Server_side.Notification_messages.*;
+import Messages.Server_side.Success_messages.*;
 import Server.Structures.Gossip_chat;
 import Server.Structures.Gossip_user;
 
@@ -296,10 +285,6 @@ public class Gossip_parser {
 			return null;
 		
 		String type = (String)obj.get(Gossip_success_message.SUCCESSMSG);
-		if (type.equals(Gossip_success_message.successMsg.CHATLIST.name()))
-			return Gossip_success_message.successMsg.CHATLIST;
-		if (type.equals(Gossip_success_message.successMsg.FRIENDLIST.name()))
-			return Gossip_success_message.successMsg.FRIENDLIST;
 		if (type.equals(Gossip_success_message.successMsg.LOGIN.name()))
 			return Gossip_success_message.successMsg.LOGIN;
 		if (type.equals(Gossip_success_message.successMsg.REGISTRATION.name()))

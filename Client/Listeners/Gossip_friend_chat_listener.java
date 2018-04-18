@@ -11,8 +11,8 @@ import java.net.Socket;
 import javax.swing.JTextArea;
 
 import Client.Forms.Gossip_friend_chat_form;
-import Client.Threads.Gossip_send_file_thread;
-import Client.Threads.Gossip_send_message_thread;
+import Client.Threads.Request_threads.Gossip_send_file_thread;
+import Client.Threads.Request_threads.Gossip_send_message_thread;
 import Server.Structures.Gossip_user;
 
 /**
@@ -24,9 +24,9 @@ import Server.Structures.Gossip_user;
 public class Gossip_friend_chat_listener extends Gossip_listener {
 	
 	private Gossip_friend_chat_form window;
-	private String friend;
-	private Gossip_friend_chat_listener this_friend_chat_listener;
-	private Gossip_main_listener main;
+	private String friend; //nome dell'amico
+	private Gossip_friend_chat_listener this_friend_chat_listener; //riferimento a questo ogetto
+	private Gossip_main_listener main; //riferimento al controller principale del client
 	
 	public Gossip_friend_chat_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_main_listener m, Gossip_user u, String f) {
 		super(i, o, s, u);
@@ -44,7 +44,7 @@ public class Gossip_friend_chat_listener extends Gossip_listener {
 	}
 	
 	/**
-	 * Per richerche
+	 * Per le ricerche
 	 * @param f
 	 */
 	public Gossip_friend_chat_listener(String f) {
@@ -72,6 +72,7 @@ public class Gossip_friend_chat_listener extends Gossip_listener {
 			public void actionPerformed(ActionEvent e) {
 				//avvio thread per spedire il messaggio
 				new Gossip_send_message_thread(input, output, socket, this_friend_chat_listener, user, friend, window.getMsgBox().getText()).start();
+				//svuoto la text box
 				window.getMsgBox().setText("");
 			}
 		});
@@ -83,6 +84,7 @@ public class Gossip_friend_chat_listener extends Gossip_listener {
 			public void actionPerformed(ActionEvent e) {
 				//avvio thread per spedire il file
 				new Gossip_send_file_thread(input, output, socket, this_friend_chat_listener, user, friend, window.getFileBox().getText()).start();
+				//svuoto la text box
 				window.getFileBox().setText("");
 			}
 		});
@@ -97,6 +99,7 @@ public class Gossip_friend_chat_listener extends Gossip_listener {
 	}
 	
 	@Override
+	//due Gossip_friend_chat_listener sono uguali quando contengono la stessa stringa friend
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof Gossip_friend_chat_listener)) {
 			return false;

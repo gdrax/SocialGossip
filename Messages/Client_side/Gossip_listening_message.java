@@ -1,5 +1,11 @@
 package Messages.Client_side;
 
+/**
+ * Messaggio usato per segnalare al server, che il socket è destinato a ricevere solo notifiche
+ *  
+ * @author Gioele Bertoncini
+ *
+ */
 public class Gossip_listening_message extends Gossip_client_message {
 
 	public static final String PASSWORD = "password";

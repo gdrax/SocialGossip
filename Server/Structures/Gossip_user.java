@@ -16,15 +16,18 @@ import Server.Threads.FriendOfflineException;
  */
 public class Gossip_user implements Serializable {
 
-	private static final long serialVersionUID = 6770435670565135962L;
+	private static final long serialVersionUID = 4633680942029050701L;
+	
 	private String nickname;
 	private String language;
 	private String password;
-	private boolean online;
-	private ArrayList<Gossip_chat> chats;
-	private ArrayList<Gossip_user> friends;
-	private transient Socket messageSocket;
-	private Gossip_RMI_client_interface RMI_channel;
+	private boolean online; //status dell'utente
+	private ArrayList<Gossip_chat> chats; //lista delle chat di cui fa parte
+	private ArrayList<Gossip_user> friends; //lista degli amici
+	private transient Socket messageSocket; //socket dove riceve le notifiche dal server
+	private Gossip_RMI_client_interface RMI_channel; //interfaccia RMI
+	
+	//campi per la serializzazione
 	public static final String NAME = "name";
 	public static final String STATUS = "status";
 	public static final String LANGUAGE = "language";
@@ -186,7 +189,7 @@ public class Gossip_user implements Serializable {
 	}
 	
 	/**
-	 * @return socket su cui l'utente è connesso, null se è offline
+	 * @return socket su cui l'utente riceve le notifiche, null se è offline
 	 */
 	public synchronized Socket getMessageSocket() throws FriendOfflineException{
 		if (messageSocket == null)
@@ -195,7 +198,7 @@ public class Gossip_user implements Serializable {
 	}
 	
 	/**
-	 * Imposta il socket sul quale il client riceve i messaggi
+	 * Imposta il socket sul quale il client riceve le notifiche
 	 * @param socket
 	 */
 	public synchronized void setMessageSocket(Socket socket) {
@@ -220,6 +223,7 @@ public class Gossip_user implements Serializable {
 	}
 	
 	@Override
+	//due Gossip_user sono uguali se hanno lo stesso nickname
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof Gossip_user)) {
 			return false;
@@ -234,6 +238,7 @@ public class Gossip_user implements Serializable {
 	}
 	
 	/**
+	 * Serializza l'utente
 	 * @return un JSONObject contenente nome, status e lingua dell'utente
 	 */
 	@SuppressWarnings("unchecked")

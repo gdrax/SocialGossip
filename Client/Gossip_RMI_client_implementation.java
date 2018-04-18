@@ -10,14 +10,14 @@ import Server.Structures.Gossip_chat;
 import Server.Structures.Gossip_user;
 
 /**
- * Imlementazione dell'interfaccia remota del client
+ * Implementazione dell'interfaccia remota del client
  * 
  * @author Gioele Bertoncini
  *
  */
 public class Gossip_RMI_client_implementation extends RemoteObject implements Gossip_RMI_client_interface {
 	
-	private static final long serialVersionUID = -4355764862846461175L;
+	private static final long serialVersionUID = 5937418587613162498L;
 	private Gossip_main_listener main;
 	
 	public Gossip_RMI_client_implementation(Gossip_main_listener m) {
@@ -57,6 +57,7 @@ public class Gossip_RMI_client_implementation extends RemoteObject implements Go
 		if (chat != null) {
 			//aggiungo chat alla lista
 			main.addChatroom(chat);
+			//aggiungo il nome della chat all'elenco visualizzato dalla finestra
 			main.getChatListModel().addElement(chat.getName());
 			main.infoMessage("Nuova chatroom: "+chat.getName());
 		}
@@ -69,7 +70,4 @@ public class Gossip_RMI_client_implementation extends RemoteObject implements Go
 		//rimuovo chat dalla finestra
 		main.getChatListModel().removeElement(chat.getName());
 	}
-	
-	//TODO: Aggiornare serial version ID
-
 }

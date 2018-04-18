@@ -7,7 +7,7 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 
 import Client.Forms.Gossip_login_form;
-import Client.Threads.Gossip_login_thread;
+import Client.Threads.Request_threads.Gossip_login_thread;
 import Server.Structures.Gossip_user;
 
 /**
@@ -36,7 +36,6 @@ public class Gossip_login_listener extends Gossip_listener {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				
 				//avvio thread che invia la richiesta di login
 				new Gossip_login_thread(input, output, socket, this_listener, new Gossip_user(window.getUsername().getText()), window.getPassword().getPassword()).start();;
 			}
@@ -47,9 +46,11 @@ public class Gossip_login_listener extends Gossip_listener {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				//apro finestra di regisrtazione
+				//creo finestra di regisrtazione
 				Gossip_register_listener rListener = new Gossip_register_listener(input, output, socket);
+				//chiudo la finestra di login
 				closeWindow();
+				//apro la finestra di registrazione
 				rListener.init();
 			}
 		});

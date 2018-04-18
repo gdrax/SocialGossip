@@ -7,8 +7,9 @@ package Server.Structures;
  *
  */
 public class ChatNotFoundException extends Exception {
-	private static final long serialVersionUID = 1L;
-	
+
+	private static final long serialVersionUID = -1212910103881269802L;
+
 	public ChatNotFoundException() {
 		super();
 	}

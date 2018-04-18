@@ -7,7 +7,7 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 
 import Client.Forms.Gossip_register_form;
-import Client.Threads.Gossip_register_thread;
+import Client.Threads.Request_threads.Gossip_register_thread;
 
 /**
  * Controller della finestra di registrazione
@@ -45,9 +45,11 @@ public class Gossip_register_listener extends Gossip_listener {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//apro finestra di login
+				//creo finestra di login
 				Gossip_login_listener lListener = new Gossip_login_listener(input, output, socket);
+				//chiudo la finestra di registrazione
 				closeWindow();
+				//apro la finestra di login
 				lListener.init();
 			}
 		});

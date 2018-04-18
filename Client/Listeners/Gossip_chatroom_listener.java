@@ -29,13 +29,13 @@ import Server.Structures.Gossip_user;
  */
 public class Gossip_chatroom_listener extends Gossip_listener {
 	
-	private Gossip_chatroom_form window;
-	private Gossip_chat chat;
-	private Gossip_main_listener main;
-	private DatagramSocket chatSocket;
-	private InetAddress dispatcherAddress;
-	private int port;
-	private Gossip_chat_receiver_thread chat_receiver;
+	private Gossip_chatroom_form window; //finestra della chat
+	private Gossip_chat chat; //dati della chat
+	private Gossip_main_listener main; //riferimento al controller principale del client
+	private DatagramSocket chatSocket; //socket per spedire i messaggi al thread dispatcher del server
+	private InetAddress dispatcherAddress; //indirizzo del thread dispatcher del server
+	private int port; //porta sulla quale è in ascolto il thread dispatcher del server
+	private Gossip_chat_receiver_thread chat_receiver; //riferimento al thread receiver del client per questa chat
 	
 	public Gossip_chatroom_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_main_listener m, Gossip_user u, Gossip_chat c) throws SocketException, UnknownHostException {
 		super(i, o, s, u);
@@ -91,23 +91,25 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 			public void actionPerformed(ActionEvent e) {
 				//invio messaggio sul multicast
 				sendChatroomText(window.getMsgBox().getText());
+				//svuoto la text box
 				window.getMsgBox().setText("");
 			}
 		});
 	}
 	
 	/**
-	 * Invia un messaggio al gruppo multicast della chat
+	 * Invia un messaggio al thread dispatcher della chat
 	 * 
 	 * @param text: contenuto del mesasggio
 	 */
 	private void sendChatroomText(String text) {
 		if (text.isEmpty())
+			//text box vuota
 			infoMessage("Scrivi qualcosa");
-		
 		else {
-			System.out.println("MESSAGGIO SU MULTICAST");
+			//creo messaggio formattato col nome del mittente
 			String toSendText = "[ "+user.getName()+" ]: "+text;
+			//svuoto textbox
 			window.getMsgBox().setText("");
 			
 			byte[] bytes = new byte[1024];
@@ -155,17 +157,8 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 		return window.getTextArea();
 	}
 	
-	/**
-	 * Aggiorna  la chat
-	 * @param c
-	 */
-	public void updateChat(Gossip_chat c) {
-		if (c == null)
-			throw new NullPointerException();
-		chat = c;
-	}
-	
 	@Override
+	//Due Gossip_chatroom_listener sono uguali quando contengono la stessa chat
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof Gossip_chatroom_listener)) {
 			return false;
@@ -173,6 +166,4 @@ public class Gossip_chatroom_listener extends Gossip_listener {
 		Gossip_chatroom_listener listener = (Gossip_chatroom_listener)o;
 		return listener.getChat().equals(this.getChat());
 	}
-	//TODO: Se chiusa e riaperta scrive due volte il primo messaggio
-	//TODO: join sul thread sembra non andare bene, e problemi col timeout 
 }

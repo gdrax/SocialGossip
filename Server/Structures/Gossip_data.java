@@ -22,9 +22,9 @@ import Server.Graph.NodeNotFoundException;
  */
 public class Gossip_data {
 	
-	private Gossip_graph<Gossip_user> graph;
-	private ArrayList<Gossip_chat> chats;
-	private String multicast_address;
+	private Gossip_graph<Gossip_user> graph; //grafo degli utenti
+	private ArrayList<Gossip_chat> chats; //lista delle chatroom
+	private String multicast_address; //prossimo indirizzo multicast disponibile
 	
 	public Gossip_data() {
 		graph = new Gossip_graph<Gossip_user>();
@@ -54,7 +54,6 @@ public class Gossip_data {
 			return;
 		//aggiorno l'indirizzo
 		multicast_address = splitted[0]+"."+splitted[1]+"."+splitted[2]+"."+i.toString();
-		System.out.println(multicast_address);
 		synchronized (chat) {
 			chats.add(chat);
 		}
@@ -76,6 +75,7 @@ public class Gossip_data {
 	public boolean removeChat(String chatname, String username) throws RemoteException {
 		synchronized (chats) {
 			int index = chats.indexOf(new Gossip_chat(chatname));
+			//solo l'owner della chat può eliminarla
 			if (chats.get(index).getOwner().equals(new Gossip_user(username))) {
 				for (Gossip_user user: chats.get(index).getMembers()) {
 					user.removeChat(new Gossip_chat(chatname));
@@ -97,7 +97,7 @@ public class Gossip_data {
 	 * Aggiunge un utente ad una chat
 	 * @param chatname: chat alla quale aggiungere l'utente
 	 * @param username: utente da aggiungere
-	 * @return true: successo, false: utente gi� membro della chat
+	 * @return true: successo, false: utente già membro della chat
 	 * @throws NodeNotFoundException: utente non registrato
 	 * @throws RemoteException: Errore RMI
 	 * @throws UnknownHostException 
@@ -197,9 +197,10 @@ public class Gossip_data {
 			if (online == true)
 				graph.getNode(user).setOnline();
 				
-			else
+			else {
 				graph.getNode(user).setOffline();
 				graph.getNode(user).setRMIChannel(null);
+			}
 			for (Gossip_user friend: user.getFriends()) {
 				if (friend.getRMIChannel() != null)
 					friend.getRMIChannel().updateFriendStatus(user);

@@ -9,8 +9,8 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 
 import Client.Forms.Gossip_user_form;
-import Client.Threads.Gossip_add_friend_thread;
-import Client.Threads.Gossip_remove_friend_thread;
+import Client.Threads.Request_threads.Gossip_add_friend_thread;
+import Client.Threads.Request_threads.Gossip_remove_friend_thread;
 import Server.Structures.Gossip_user;
 
 /**
@@ -21,11 +21,11 @@ import Server.Structures.Gossip_user;
  */
 public class Gossip_user_listener extends Gossip_listener {
 
-	private Gossip_main_listener main;
-	private Gossip_user displayedUser;
-	private Gossip_user owner;
+	private Gossip_main_listener main; //riferimento al controller pricipale del client
+	private Gossip_user displayedUser; //dati dell'utente visualizzato
+	private Gossip_user owner; //dati dell'utente che sta usando il client
 	private Gossip_user_form window;
-	private Gossip_user_listener this_user_listener;
+	private Gossip_user_listener this_user_listener; //riferimento a questo oggetto
 	
 	public Gossip_user_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_main_listener m, Gossip_user ow, Gossip_user du) {
 		super(i, o, s, ow);
@@ -94,6 +94,7 @@ public class Gossip_user_listener extends Gossip_listener {
 	}
 	
 	@Override
+	//due Gossip_user_listener sono uguali se contengono lo stesso dispayedUser
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof Gossip_user_listener)) {
 			return false;

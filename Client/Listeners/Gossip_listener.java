@@ -23,10 +23,10 @@ public abstract class Gossip_listener {
 
 	protected DataInputStream input;
 	protected DataOutputStream output;
-	protected Socket socket;
+	protected Socket socket; //socket con il quale il client e connesso al server
 	protected JFrame frame;
 	protected Gossip_listener this_listener;
-	protected Gossip_user user;
+	protected Gossip_user user; //dati dell'utente che sta usando il client
 	
 	public Gossip_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_user u) {
 		if (i == null || o == null || s == null)
@@ -37,10 +37,13 @@ public abstract class Gossip_listener {
 		user = u;
 	}
 	
+	/**
+	 * Costruttore vuoto
+	 */
 	public Gossip_listener() {}
 	
 	/**
-	 * Inizializza i listener degli oggetti della finestra
+	 * Inizializza il listener della finestra, rendendola invisibile quando viene chiusa
 	 */
 	public void listen() {
 		frame.addWindowListener(new WindowAdapter() {
@@ -104,7 +107,6 @@ public abstract class Gossip_listener {
 	/**
 	 * Mostra un messaggio informativo
 	 * @param info: testo da mostrare
-	 * @param title: titolo della finestra
 	 */
 	public void infoMessage(String info) {
 		if (info == null)
@@ -119,7 +121,6 @@ public abstract class Gossip_listener {
 	/**
 	 * Mostra un messaggio di errore
 	 * @param error: testo da mostrare
-	 * @param title: titolo della finestra
 	 */
 	public void errorMessage(String error) {
 		if (error == null)

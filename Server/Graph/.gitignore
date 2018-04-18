@@ -1,0 +1,5 @@
+/Gossip_graph.class
+/Gossip_graph_edge.class
+/Gossip_graph_node.class
+/NodeAlreadyException.class
+/NodeNotFoundException.class

@@ -1,2 +1,16 @@
 /Gossip_new_chat_message.class
 /Gossip_chat_info_message.class
+/Gossip_connection_info_message.class
+/Gossip_fail_message$failMsg.class
+/Gossip_fail_message.class
+/Gossip_file_notification_message.class
+/Gossip_info_login_message.class
+/Gossip_info_registration_message.class
+/Gossip_notification_message$notificationType.class
+/Gossip_notification_message.class
+/Gossip_server_message$Op.class
+/Gossip_server_message.class
+/Gossip_success_message$successMsg.class
+/Gossip_success_message.class
+/Gossip_text_notification_message.class
+/Gossip_userinfo_message.class

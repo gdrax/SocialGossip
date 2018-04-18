@@ -17,5 +17,5 @@ public class Gossip_registration_message extends Gossip_client_message{
 		
 		jsonMsg.put(Gossip_registration_message.LANGUAGE,  language);
 		jsonMsg.put(Gossip_registration_message.PASSWORD,  password);
-		}
+	}
 }

@@ -13,27 +13,19 @@ import org.json.simple.parser.ParseException;
 
 import Messages.Gossip_message;
 import Messages.Gossip_parser;
-import Messages.Client_side.Gossip_action_message;
 import Messages.Client_side.Gossip_chat_message;
 import Messages.Client_side.Gossip_client_message;
-import Messages.Server_side.Gossip_chat_info_message;
-import Messages.Server_side.Gossip_fail_message;
-import Messages.Server_side.Gossip_file_notification_message;
-import Messages.Server_side.Gossip_info_login_message;
-import Messages.Server_side.Gossip_info_registration_message;
+import Messages.Client_side.Action_messages.Gossip_action_message;
 import Messages.Server_side.Gossip_server_message;
-import Messages.Server_side.Gossip_success_message;
-import Messages.Server_side.Gossip_text_notification_message;
-import Messages.Server_side.Gossip_userinfo_message;
+import Messages.Server_side.Fail_messages.Gossip_fail_message;
+import Messages.Server_side.Notification_messages.Gossip_file_notification_message;
+import Messages.Server_side.Notification_messages.Gossip_text_notification_message;
+import Messages.Server_side.Success_messages.*;
 import Server.Gossip_translator;
 import Server.PortNotFoundException;
 import Server.Graph.NodeAlreadyException;
 import Server.Graph.NodeNotFoundException;
-import Server.Structures.ChatAlreadyException;
-import Server.Structures.ChatNotFoundException;
-import Server.Structures.Gossip_chat;
-import Server.Structures.Gossip_data;
-import Server.Structures.Gossip_user;
+import Server.Structures.*;
 
 /**
  * Thread del pool che si occupa di servire i client
@@ -43,9 +35,9 @@ import Server.Structures.Gossip_user;
  */
 public class Gossip_worker implements Runnable {
 	
-	private Socket clientSocket;
-	private Gossip_data data;
-	private boolean closeThread;
+	private Socket clientSocket; //socket connesso con il client
+	private Gossip_data data; //dati del server
+	private boolean closeThread; //per terminare il thread in caso di connessione solo per notifiche
 	
 	public Gossip_worker(Socket s, Gossip_data d) {
 		clientSocket = s;
@@ -296,13 +288,15 @@ public class Gossip_worker implements Runnable {
 					
 				case LISTENING_OP:
 					String password = Gossip_parser.getPassword(request);
+					//memorizzo il socket solo se la password è esatta
 					if (data.getUser(sender).getPassword().equals(password)) {
 						data.getUser(sender).setMessageSocket(clientSocket);
-						//è un socket solo per le notifiche, faccio chiudere il worker
+						//è un socket solo per le notifiche, faccio terminare il thread
 						closeThread = true;
 						sendReply(new Gossip_server_message(Gossip_server_message.Op.SUCCESS_OP), clientStream);
 					}
 					else {
+						//termino comunque il thread
 						closeThread = true;
 						sendReply(new Gossip_fail_message(Gossip_fail_message.failMsg.WRONGPASSWORD), clientStream);
 					}
@@ -359,6 +353,7 @@ public class Gossip_worker implements Runnable {
 				
 			}
 		} catch (IOException e) {
+			//il client ha chiuso la connessione
 			System.out.println("Utente disconnesso");
 		} catch (ParseException e) {
 			e.printStackTrace();

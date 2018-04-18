@@ -1,4 +1,4 @@
-		package Client.Threads;
+package Client.Threads;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -17,8 +17,8 @@ import org.json.simple.parser.ParseException;
 import Client.Listeners.Gossip_main_listener;
 import Messages.Gossip_parser;
 import Messages.Client_side.Gossip_listening_message;
-import Messages.Server_side.Gossip_connection_info_message;
 import Messages.Server_side.Gossip_server_message;
+import Messages.Server_side.Success_messages.Gossip_connection_info_message;
 import Server.Gossip_config;
 import Server.PortNotFoundException;
 import Server.Structures.Gossip_user;
@@ -31,14 +31,14 @@ import Server.Structures.Gossip_user;
  */
 public class Gossip_message_receiver_thread extends Thread {
 	
-	private InetAddress address;
-	private Gossip_user user;
-	private int port;
-	private Gossip_main_listener main;
-	private Socket messageSocket;
+	private InetAddress address; //indirizzo del server
+	private Gossip_user user; //dati dell'utente che sta usando il client
+	private int port; //porta su cui è in ascolto il server
+	private Gossip_main_listener main; //riferimento al controller principale del client
+	private Socket messageSocket; //socket connesso col server
 	private DataInputStream input;
 	private DataOutputStream output;
-	private String password;
+	private String password; //passwrd dell'utente
 	
 	public Gossip_message_receiver_thread(InetAddress a, int p, Gossip_main_listener m, Gossip_user u, String psw) {
 		super();
@@ -53,6 +53,7 @@ public class Gossip_message_receiver_thread extends Thread {
 		password = psw;
 		
 		try {
+			//creo socket e recupero i due stream
 			messageSocket = new Socket(address, port);
 			input = new DataInputStream(new BufferedInputStream(messageSocket.getInputStream()));
 			output = new DataOutputStream(messageSocket.getOutputStream());
@@ -92,6 +93,11 @@ public class Gossip_message_receiver_thread extends Thread {
 		}
 	}
 	
+	/**
+	 * Analizza il contenuto della notifica e esegue le operazioni opportune
+	 * @param notification
+	 * @throws IOException
+	 */
 	private void parseNotification(String notification) throws IOException {
 		
 		try {
@@ -103,6 +109,7 @@ public class Gossip_message_receiver_thread extends Thread {
 				//notifica di messaggio in arrivo
 					case NEWMSG:
 						String friend = Gossip_parser.getNotificationSender(JSONReply);
+						//recupero l'area di testo dove scrivere il messaggio e apro la finestra della chat
 						JTextArea textArea = main.getMessageArea(friend);
 						if (textArea != null) {
 							String receiver = Gossip_parser.getNotificationSender(JSONReply);
@@ -162,5 +169,4 @@ public class Gossip_message_receiver_thread extends Thread {
 			e.printStackTrace();
 		}
 	}
-
 }

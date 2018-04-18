@@ -8,7 +8,7 @@ package Server.Graph;
  */
 public class NodeAlreadyException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5257438701436602461L;
 
 	public NodeAlreadyException() {
 		super();

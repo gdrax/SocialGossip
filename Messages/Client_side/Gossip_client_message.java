@@ -5,14 +5,14 @@ import Messages.Gossip_message;
 /**
  * Messaggio inviato da un client
  * 
- * REGISTER: richiesta di registrazione nuovo utente
- * LOGIN: richiesta di accesso
+ * REGISTER: richiesta di registrazione nuovo utente (vedi Gossip_logout_message.java)
+ * LOGIN: richiesta di accesso (vedi Gossip_login_message)
  * LOGOUT: richiesta di disconnessione
  * LISTFRIEND: richiesta di lista dei propri amici
- * ACTION: azione di interazione con altri utenti (vedi Gossip_action_message.java)
+ * ACTION: azione di interazione con altri utenti (vedi Action_message/Gossip_action_message.java)
  * CHATLIST: richiesta della lista delle chat attive
  * CHAT: interazione con una chat (vedi Gossip_chat_message.java)
- * LISTENING: inviato dal socket per le notifiche per farlo salvare al server
+ * LISTENING: inviato dal socket per le notifiche per farlo salvare al server (vedi Gossip_listening_message.java)
  *  
  * @author Gioele Bertoncini
  *

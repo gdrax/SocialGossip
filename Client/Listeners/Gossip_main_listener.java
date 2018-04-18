@@ -21,13 +21,13 @@ import javax.swing.JTextArea;
 
 import Client.Gossip_RMI_client_implementation;
 import Client.Forms.Gossip_main_form;
-import Client.Threads.Gossip_add_chat_thread;
-import Client.Threads.Gossip_enter_chat_thread;
-import Client.Threads.Gossip_exit_chat_thread;
-import Client.Threads.Gossip_logout_thread;
 import Client.Threads.Gossip_message_receiver_thread;
-import Client.Threads.Gossip_remove_chat_thread;
-import Client.Threads.Gossip_search_thread;
+import Client.Threads.Request_threads.Gossip_add_chat_thread;
+import Client.Threads.Request_threads.Gossip_enter_chat_thread;
+import Client.Threads.Request_threads.Gossip_exit_chat_thread;
+import Client.Threads.Request_threads.Gossip_logout_thread;
+import Client.Threads.Request_threads.Gossip_remove_chat_thread;
+import Client.Threads.Request_threads.Gossip_search_thread;
 import Messages.RMI.Gossip_RMI_client_interface;
 import Messages.RMI.Gossip_RMI_server_interface;
 import Server.Gossip_config;
@@ -44,15 +44,15 @@ import Server.Structures.Gossip_user;
 public class Gossip_main_listener extends Gossip_listener {
 
 	private Gossip_main_form window;
-	private Gossip_main_listener main;
-	private ArrayList<Gossip_chatroom_listener> chatroom_listeners;
-	private ArrayList<Gossip_friend_chat_listener> friend_chat_listeners;
-	private ArrayList<Gossip_user_listener> user_listeners;
-	private Gossip_RMI_server_interface server_interface;
-	private Gossip_RMI_client_implementation callback;
-	private Gossip_message_receiver_thread th_receiver;
-	private ArrayList<Gossip_chat> chatrooms;
-	private String password;	
+	private Gossip_main_listener main; //riferimento a questo oggetto
+	private ArrayList<Gossip_chatroom_listener> chatroom_listeners; //lista dei listener delle chatroom
+	private ArrayList<Gossip_friend_chat_listener> friend_chat_listeners; //lista dei listener delle chat con amici
+	private ArrayList<Gossip_user_listener> user_listeners; //lista dei listener delle finestre di info su utenti
+	private Gossip_RMI_server_interface server_interface; //interfaccia RMI del server
+	private Gossip_RMI_client_implementation callback; //implementazione dell'interfaccia RMI del client
+	private Gossip_message_receiver_thread th_receiver; //riferimento al thread che riceve le notifiche dal server
+	private ArrayList<Gossip_chat> chatrooms; //lista delle chat disponibili di cui l'utente fa parte
+	private String password; //password dell'utente
 	
 	public Gossip_main_listener(DataInputStream i, DataOutputStream o, Socket s, Gossip_user u, ArrayList<Gossip_user> f, ArrayList<Gossip_chat> c, String p) {
 		super(i, o, s, u);
@@ -71,13 +71,18 @@ public class Gossip_main_listener extends Gossip_listener {
 		main = this;
 	}
 	
+	/**
+	 * Registra le callback del client sul server tramite la sua interfaccia RMI
+	 */
 	private void initRMI() {
 		try {
-			//inizializzazione RMI
+			//recuper l'interfaccia del server
 			Registry reg = 	LocateRegistry.getRegistry(Gossip_config.RMI_PORT);
 			server_interface = (Gossip_RMI_server_interface) reg.lookup(Gossip_config.RMI_NAME);
+			//creo l'interfaccia del client
 			callback = new Gossip_RMI_client_implementation(this);
 			Gossip_RMI_client_interface stub = (Gossip_RMI_client_interface) UnicastRemoteObject.exportObject(callback,  0);
+			//registro l'interfaccia sul server
 			server_interface.registerForCallback(user.getName(), stub);
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -86,7 +91,6 @@ public class Gossip_main_listener extends Gossip_listener {
 		} catch (NodeNotFoundException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -100,7 +104,9 @@ public class Gossip_main_listener extends Gossip_listener {
 	public void listen() {
 		super.listen();
 		
+		//registro l'interfaccia RMI sul server
 		initRMI();
+		//avvio thread receiver
 		initThreadReceiver();
 		
 		//listener della chiusura della finestra (che equivale a eseguire il logout)
@@ -146,13 +152,14 @@ public class Gossip_main_listener extends Gossip_listener {
 					Gossip_friend_chat_listener listener;
 					synchronized (friend_chat_listeners) {
 						try {
-							//se la finestra della chat esisteva già la mostro
+							//se la finestra della chat esisteva già, la rendo visibile
 							listener = friend_chat_listeners.get(friend_chat_listeners.indexOf(new Gossip_friend_chat_listener(friend)));
 							if (!listener.getFrame().isVisible())
 								listener.setVisible(true);
 						} catch (IndexOutOfBoundsException ex) {
 							//la finestra della chat non c'è, ne apro una nuova
 							listener = new Gossip_friend_chat_listener(input, output, socket, main, user, friend);
+							//aggiungo il listener alla lista
 							friend_chat_listeners.add(listener);
 							listener.init();
 						}
@@ -203,13 +210,15 @@ public class Gossip_main_listener extends Gossip_listener {
 	}
 	
 	/**
-	 * Aggiunge il listener della finestra info dell'utente cercato se non è già presente
+	 * Aggiunge il listener della finestra info dell'utente cercato, se non è già presente
 	 * @param searchedUser: searchedUser utente cercato
 	 */
 	public void addSearchedUserListener(Gossip_user searchedUser) {
 		synchronized (user_listeners) {
 			if(!user_listeners.contains(new Gossip_user_listener(searchedUser))) {
+				//se non esisteva già un listener per questo utente ne creo uno nuovo
 				Gossip_user_listener newListener = new Gossip_user_listener(input, output, socket, main, user, searchedUser);
+				//lo aggiungo in lista
 				user_listeners.add(newListener);
 				newListener.init();
 			}
@@ -236,9 +245,9 @@ public class Gossip_main_listener extends Gossip_listener {
 	 */
 	public JTextArea getChatMessageArea(Gossip_chat chat) {
 		try {
-			System.out.println("GOTCHA");
 			return chatroom_listeners.get(chatroom_listeners.indexOf(new Gossip_chatroom_listener(chat))).getTextArea();
 		} catch (IndexOutOfBoundsException e) {
+			//listener non presente
 			return null;
 		}
 	}
@@ -253,45 +262,46 @@ public class Gossip_main_listener extends Gossip_listener {
 		Gossip_chatroom_listener newListener;
 		try {
 			synchronized (chatroom_listeners) {
+				//recupero il listener della chat dalla lista
 				newListener = chatroom_listeners.get(chatroom_listeners.indexOf(new Gossip_chatroom_listener(chat)));
-				
-				System.out.println("Aprilo");
+				//lo rendo visibile
 				if (!newListener.getFrame().isVisible())
 					newListener.setVisible(true);
-				System.out.println("Open "+chatroom_listeners.size());
 			}
 		} catch (IndexOutOfBoundsException e) {
-			//la finestra non c'è ne apro una nuova
+			//listener non trovato, ne creo uno nuovo
 			newListener = new Gossip_chatroom_listener(input, output, socket, main, user, chat);
-			System.out.println("IOOB");
 			synchronized (chatroom_listeners ) {
+				//aggiungo listener alla lista
 				chatroom_listeners.add(newListener);
 			}
 			synchronized (chatrooms) {
+				//aggiungo chat alla lista
 				chatrooms.add(chat);
 			}
 			newListener.init();
-			System.out.println("Add "+chatroom_listeners.size());
 		}
-		
 	}
 	
 	/**
 	 * Elimina il listener della finestra di interazione con la chat
-	 * @param chatname: chat contenuta dal listener
+	 * @param chat: chat contenuta dal listener
 	 */
 	public void removeChatroomListener(Gossip_chat chat) {
 		synchronized (chatroom_listeners) {
 			try {
+				//recupero il listener dalla lista
 				Gossip_chatroom_listener toRemove = chatroom_listeners.get(chatroom_listeners.indexOf(new Gossip_chatroom_listener(chat)));
-				//rimuovo listener
+				//termino il thread receiver della chat
 				toRemove.stopReceiverThread();
+				//rendo invisibile la finestra
+				toRemove.setVisible(false);
+				//rimuovo listener dalla lista
 				chatroom_listeners.remove(toRemove);
 			} catch (IndexOutOfBoundsException e) {
 				//chat non presente
 			}
 		}
-		System.out.println("Remove: "+chatroom_listeners.size());
 	}
 	
 	/**
@@ -308,19 +318,6 @@ public class Gossip_main_listener extends Gossip_listener {
 	}
 	
 	/**
-	 * Aggiorna i dati di una chatroom
-	 * @param chat
-	 */
-	public void updateChatroom(Gossip_chat chat) {
-		synchronized (chatrooms) {
-			//aggiorno chat
-			chatrooms.remove(chat);
-			chatrooms.add(chat);
-		}
-	}
-	
-	
-	/**
 	 * Restituisce l'area di testo della finestra della chat, se non esiste ne apre una nuova
 	 * @param friend
 	 * @return area di testo dove scrivere i messaggi che vengono ricevuti
@@ -328,10 +325,12 @@ public class Gossip_main_listener extends Gossip_listener {
 	public JTextArea getMessageArea(String friend) {
 		synchronized (friend_chat_listeners) {
 			try {
+				//cerco listener nella lista
 				return friend_chat_listeners.get(friend_chat_listeners.indexOf(new Gossip_friend_chat_listener(friend))).getTextArea();
 			} catch (IndexOutOfBoundsException e) {
-				//non c'è la finestra della chat, quindi la apro
+				//non c'è la finestra della chat, ne apro una nuova
 				Gossip_friend_chat_listener newChat = new Gossip_friend_chat_listener(input, output, socket, main, user, friend);
+				//la aggiungo alla lista
 				friend_chat_listeners.add(newChat);
 				newChat.init();
 				return newChat.getTextArea();
@@ -379,6 +378,7 @@ public class Gossip_main_listener extends Gossip_listener {
 		try {
 			return chatrooms.get(chatrooms.indexOf(new Gossip_chat(chatname)));
 		} catch (IndexOutOfBoundsException e) {
+			//chat non presente
 			return null;
 		}
 	}

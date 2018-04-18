@@ -22,18 +22,19 @@ import Server.Threads.Gossip_chat_dispatcher;
  */
 public class Gossip_chat implements Serializable{
 
-	private static final long serialVersionUID = -2407937145602305921L;
+	private static final long serialVersionUID = 6690754741524593302L;
 	
-	private String chatname;
-	private Gossip_user owner;
-	private ArrayList<Gossip_user> members;
-	private transient MulticastSocket multicastSocket;
-	private InetAddress multicastAddress;
-	private InetAddress chatAddress;
-	private int multicastPort;
-	private int chatPort;
-	private transient Gossip_chat_dispatcher dispatcher;
+	private String chatname; //nome della chat
+	private Gossip_user owner; //dati del proprietario della chat
+	private ArrayList<Gossip_user> members; //lista dei membri della chat
+	private transient MulticastSocket multicastSocket; //socket per spedire i messaggi all'indirizzo multicast
+	private InetAddress multicastAddress; //indirizzo multicast della chat
+	private InetAddress chatAddress; //indirizzo del thread dispatcher della chat
+	private int multicastPort; //porta per i messaggi multicast
+	private int chatPort; //porta sulla quale è in ascolto il thread dispatcher della chat
+	private transient Gossip_chat_dispatcher dispatcher; //riferimento al thread dispatcher
 	
+	//nomi dei campi per la serializzazione
 	public static final String CHATNAME = "chatname";
 	public static final String MEMBERS = "members";
 	public static final String MULTICASTADDRESS = "multicastaddress";
@@ -208,6 +209,7 @@ public class Gossip_chat implements Serializable{
 	}
 	
 	@Override
+	//due Gossip_chat sono uguali se hanno lo stesso nome
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof Gossip_chat)) {
 			return false;
@@ -216,6 +218,10 @@ public class Gossip_chat implements Serializable{
 		return chat.getName().equals(this.getName());
 	}
 	
+	/**
+	 * Serializza la chat
+	 * @return JSONObjetc contenente i dati della chat
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONObject toJSONObject() {
 		JSONObject chat = new JSONObject();

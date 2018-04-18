@@ -20,7 +20,7 @@ public class Gossip_chat_dispatcher extends Thread {
 
 	private int port; //porta per la ricezione di questa chat
 	private MulticastSocket multicastSocket; //socket multicast della chat
-	private DatagramSocket chatSocket; //socket di ricezione della chat
+	private DatagramSocket chatSocket; //socket di ricezione del thread
 	private InetAddress multicastAddress; //indirizzo multicast
 	
 	public Gossip_chat_dispatcher(InetAddress ma, MulticastSocket ms) throws SocketException {
@@ -31,7 +31,9 @@ public class Gossip_chat_dispatcher extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		//creo socket
 		chatSocket = new DatagramSocket(port);
+		//imposto timeout
 		chatSocket.setSoTimeout(600);
 	}
 	

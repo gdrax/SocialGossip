@@ -1,8 +1,7 @@
 package Messages.Client_side;
 
-
 /**
- * Messaggio di login dove si fornsce la password
+ * Messaggio di login
  * 
  * @author Gioele Bertoncini
  *

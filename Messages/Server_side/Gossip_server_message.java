@@ -6,9 +6,9 @@ import Messages.Client_side.Gossip_client_message;
 /**
  * Messaggio inviato dal server
  * 
- * FAIL: Operazione fallita (vedi Gossip_fail_message.java)
- * SUCCESS: Operazione avvenuta con successo
- * NOTIFICATION: Notifica (vedi Gossip_notification_message.java)
+ * FAIL: Operazione fallita (vedi Fail_messages/Gossip_fail_message.java)
+ * SUCCESS: Operazione avvenuta con successo (vedi Success_message/Gossip_success_message.java)
+ * NOTIFICATION: Notifica (vedi Notification_messages/Gossip_notification_message.java)
  * 
  * @author Gioele Bertoncini
  *

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.SocketTimeoutException;
 
 import javax.swing.JTextArea;
 
@@ -18,10 +19,10 @@ import Server.Structures.Gossip_chat;
  */
 public class Gossip_chat_receiver_thread extends Thread {
 	
-	private InetAddress address;
-	private Gossip_main_listener main;
-	private Gossip_chat chat;
-	private MulticastSocket chatSocket;
+	private InetAddress address; //indirizzo multicast della chatroom
+	private Gossip_main_listener main; //riferimento al conroller principale del server
+	private Gossip_chat chat; //dati della chatroom relativa al thread
+	private MulticastSocket chatSocket; //socket multicast da cui si ricevono i messaggi
 
 	public Gossip_chat_receiver_thread(Gossip_chat c, Gossip_main_listener m) throws IOException {
 		if (c == null || m == null)
@@ -36,6 +37,7 @@ public class Gossip_chat_receiver_thread extends Thread {
 		
 		//entro nel gruppo multicast
 		chatSocket.joinGroup(address);
+		//imposto il timeout del socket
 		chatSocket.setSoTimeout(500);
 	}
 	
@@ -48,7 +50,7 @@ public class Gossip_chat_receiver_thread extends Thread {
 		while(!Thread.interrupted()) {
 			try {
 				
-				//aspetto messaggio
+				//aspetto di ricevere un messaggio
 				chatSocket.receive(received);
 				
 				//creo stringa da array di byte
@@ -59,12 +61,13 @@ public class Gossip_chat_receiver_thread extends Thread {
 				if (text_area != null)
 					text_area.append(text+"\n");
 				
+			} catch (SocketTimeoutException e) {
+				//timeout
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("LA CHIUDO QUA");
-		//chiudo connessione
+		//il thread è stato interrotto, chiudo la connessione
 		chatSocket.close();
 	}
 }

@@ -1,0 +1,13 @@
+/Gossip_add_chat_thread.class
+/Gossip_add_friend_thread.class
+/Gossip_client_thread.class
+/Gossip_enter_chat_thread.class
+/Gossip_exit_chat_thread.class
+/Gossip_login_thread.class
+/Gossip_logout_thread.class
+/Gossip_register_thread.class
+/Gossip_remove_chat_thread.class
+/Gossip_remove_friend_thread.class
+/Gossip_search_thread.class
+/Gossip_send_file_thread.class
+/Gossip_send_message_thread.class
