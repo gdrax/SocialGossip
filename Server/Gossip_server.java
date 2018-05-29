@@ -41,7 +41,7 @@ public class Gossip_server implements Runnable {
 	}
 	
 	/**
-	 * Esporta l'interfaccia RMI del serber
+	 * Esporta l'interfaccia RMI del server
 	 */
 	public void initRMI() {
 		try {
@@ -62,7 +62,8 @@ public class Gossip_server implements Runnable {
 	public void run() {
 		
 		initRMI();
-		
+		System.out.println("Server in esecuzione...");
+
 		try {
 			while(true) {
 				//accetto una connessione
@@ -87,6 +88,7 @@ public class Gossip_server implements Runnable {
 	public static void main(String[] args) {
 		try {
 			Gossip_server server = new Gossip_server();
+			System.out.println("Server inizializzato");
 			server.run();
 		} catch (IOException e) {
 			e.printStackTrace();
